@@ -1,0 +1,93 @@
+$color: #cc16e8;
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        width: 20rem;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 400px;
+        border-radius: 5px;
+        border: 1px solid $color;
+
+        .text-signin {
+            margin-top: 1rem;
+            font-size: 1.5em;
+        }
+
+        .input-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            input {
+                min-height: 3rem;
+                border: 1px solid #bdbdbd;
+                border-radius: 10px;
+                padding: 0 10px;
+                min-width: auto;
+                font-size: 16px;
+                text-align: center;
+                margin: 0.2rem 0;
+
+                &:active {
+                    border: 1px solid $color;
+                    transition: 0.3s;
+                }
+
+                &:hover {
+                    border: 1px solid $color;
+                    transition: 0.2s;
+                }
+            }
+        }
+
+        .signup {
+            display: flex;
+            flex-direction: row;
+
+            .text-signup {
+                font-size: 0.7em;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .a-signup {
+                border: none;
+                font-size: 0.7em;
+                color: $color;
+            }
+        }
+
+        .button-signin {
+            background-color: $color;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            min-width: 9rem;
+            margin: 0.2rem 1rem;
+            min-height: 1rem;
+            border-radius: 10px;
+            &:hover {
+                background-color: #ffffff;
+                border: 1px solid $color;
+                color: $color;
+                transition: 0.2s;
+            }
+        }
+    }
+}
+

@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { RecoilRoot, useRecoilState } from "recoil";
+import { Welcome } from "./pages/welcome/Welcome"
+import { SignIn } from './pages/signin/SignIn';
+import { SignUp } from './pages/signup/SignUp';
+import { errorState } from './app/states/Error.state';
+import { ErrorPopup } from './components/ErrorPopup';
+import { Profile } from './pages/profile/Profile';
 
-function App() {
+const BaseRouter = () => {
+  const [err, setErr] = useRecoilState(errorState);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    {err ? (
+      <ErrorPopup err={err} setOpen={setErr} />
+    ) : (
+      <></>
+    )}
+    <BrowserRouter>
+      <Routes>
+        <Route path="*" element={<Navigate to="/"/>}/>
+        <Route path="/" element={<Welcome/>} />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/profiles" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
+    </>
   );
 }
+
+const App = () => {
+  return (
+    <RecoilRoot>
+      <BaseRouter />
+    </RecoilRoot>
+  );
+};
 
 export default App;
