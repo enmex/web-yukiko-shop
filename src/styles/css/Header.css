@@ -1,5 +1,5 @@
 .header {
-  width: 100%;
+  width: 100vw;
   position: relative;
   background-color: rgb(220, 0, 168);
   display: flex;
@@ -9,54 +9,29 @@
 .header .navbar {
   display: inline;
 }
-.header .navbar .navbar-button {
-  box-sizing: inherit;
-  transition-property: all;
-  transition-duration: 0.6s;
-  transition-timing-function: ease;
-  flex-direction: column;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  letter-spacing: 0;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1em;
-  text-align: center;
+
+.navbar-button {
+  width: 200px;
+  height: 40px;
+  font-family: sans-serif;
+  border: 2px solid #333;
+  transition: all 0.35s;
 }
-@media (min-width: 600px) {
-  .header .navbar .navbar-button {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-}
-.header .navbar .navbar-button:hover:active {
-  letter-spacing: 5px;
-}
-.header .navbar .navbar-button:hover:after:before {
-  backface-visibility: hidden;
-  border-color: #fff;
-  transition: width 350ms ease-in-out;
-  width: 70%;
-}
-.header .navbar .navbar-button:hover:before {
-  bottom: auto;
+.navbar-button:after {
+  position: absolute;
+  content: "";
   top: 0;
-  width: 70%;
-}
-.header .navbar .navbar-button:after:before {
-  backface-visibility: hidden;
-  border: 1px solid rgba(255, 255, 255, 0);
-  bottom: 0px;
-  content: " ";
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  transition: all 280ms ease-in-out;
+  left: 0;
   width: 0;
+  height: 100%;
+  background: #ff003b;
+  transition: all 0.35s;
+}
+.navbar-button:hover {
+  color: black;
+}
+.navbar-button:hover:after {
+  width: 100%;
 }
 
 /*# sourceMappingURL=Header.css.map */

@@ -16,7 +16,7 @@
   border-radius: 5px;
   border: 1px solid #cc16e8;
 }
-.container .form .text-signin {
+.container .form .form-header {
   margin-top: 1rem;
   font-size: 1.5em;
 }
@@ -44,22 +44,7 @@
   border: 1px solid #cc16e8;
   transition: 0.2s;
 }
-.container .form .signup {
-  display: flex;
-  flex-direction: row;
-}
-.container .form .signup .text-signup {
-  font-size: 0.7em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.container .form .signup .a-signup {
-  border: none;
-  font-size: 0.7em;
-  color: #cc16e8;
-}
-.container .form .button-signin {
+.container .form .submit-button {
   background-color: #cc16e8;
   border: none;
   color: white;
@@ -73,11 +58,11 @@
   min-height: 1rem;
   border-radius: 10px;
 }
-.container .form .button-signin:hover {
+.container .form .submit-button:hover {
   background-color: #ffffff;
   border: 1px solid #cc16e8;
   color: #cc16e8;
   transition: 0.2s;
 }
 
-/*# sourceMappingURL=SignIn.css.map */
+/*# sourceMappingURL=AuthForm.css.map */

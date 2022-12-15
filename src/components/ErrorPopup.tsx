@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SetterOrUpdater } from "recoil";
 import "../styles/css/ErrorPopup.css"
 

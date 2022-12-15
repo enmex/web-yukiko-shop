@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { authService } from "../../app/api/Auth";
 import { errorState } from "../../app/states/Error.state";
-import { userState } from "../../app/states/User.state";
-import "../../styles/css/SignIn.css"
+import { userAuthorized, userState } from "../../app/states/User.state";
+import "../../styles/css/AuthForm.css"
 
 export const CodeVerification = () => {
-    const [user, ] = useRecoilState(userState);
+    const authorized = useRecoilValue(userAuthorized);
+    const [user, setUser] = useRecoilState(userState);
     const [, setErr] = useRecoilState(errorState);
     const [state, setState] = useState({
         code: 0,
@@ -18,16 +19,17 @@ export const CodeVerification = () => {
     useEffect(() => {
         (async () => {
             try {
-                console.log(user.profile.email);
-                await authService.sendVerifyCode({
-                    email: user.profile.email
-                })
+                if (!authorized) {
+                    await authService.sendVerifyCode({
+                        email: user.profile.email
+                    })
+                }
             } catch (e) {
                 const message = e instanceof Error ? e.message : "unknown error";
                 setErr(message);
             }
         })()
-    }, [setErr, user.profile.email]);
+    }, [authorized, navigate, setErr, user.profile.email]);
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -40,7 +42,7 @@ export const CodeVerification = () => {
                 code: state.code,
             });
 
-            localStorage.removeItem("userPreSignUp");
+            setUser(apiResponse);
             localStorage.setItem("user", JSON.stringify(apiResponse));
             navigate("/")
         } catch (e) {
@@ -50,23 +52,28 @@ export const CodeVerification = () => {
     }
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        setState({
-          ...state,
-          [e.target.name]: e.target.value,
-        });
+        e.preventDefault(); 
+        try {
+            const value = parseInt(e.target.value);
+            setState({
+                code: value,
+            });
+        } catch(e) {
+            const message = e instanceof Error ? e.message : "unknown error";
+            setErr(message);
+        }
     };
 
     return (
         <>
         <div className="container">
             <form className="form" onSubmit={onSubmit}>
-                <div className="text-signin">Код верификации</div>
+                <div className="form-header">Код верификации</div>
                 <div className="input-form">
-                    <input placeholder="Код верификации" className="input" onInput={handleInput}></input>
+                    <input name="code" placeholder="Код верификации" className="input" onInput={handleInput}></input>
                 </div>
 
-                <button className="button-signin">Подтвердить</button>
+                <button className="submit-button">Подтвердить</button>
             </form>
         </div>
         </>

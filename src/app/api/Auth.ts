@@ -3,6 +3,9 @@ import { Host, Port } from "../../config";
 import { User } from "../types/User";
 
 export type AuthorizationResponse = User;
+export type ErrorResponse = {
+    message: string;
+}
 
 export type SignInPayload = {
     email: string;
@@ -38,26 +41,36 @@ export const authService: AuthorizationService ={
         payload: SendVerifyCodePayload
     ) => {
         const url = "http://" + Host + ":" + Port + "/auth/sendVerifyCode";
-        await axios.post(url, payload);
+        await axios.post(url, payload).catch((error) => {
+            throw new Error(error.response.data.message);
+        });
     },
 
     signIn: async (
         payload: SignInPayload
     ): Promise<AuthorizationResponse> => {
         const url = "http://" + Host + ":" + Port + "/auth/signIn";
-        const user = await axios.post<AuthorizationResponse>(url, payload);
+        const response = await axios.post<AuthorizationResponse>(url, payload).catch((error) => {
+            throw new Error(error.response.data.message);
+        });;
+
         axios.defaults.headers.common["Authorization"] =
-            "Bearer " + user.data.auth.access.token;
-        return user.data;
+            "Bearer " + response.data.auth.access.token;
+    
+        return response.data;
     },
 
     signUp: async (
         payload: SignUpPayload
     ): Promise<AuthorizationResponse> => {
         const url = "http://" + Host + ":" + Port + "/auth/signUp";
-        const user = await axios.post<AuthorizationResponse>(url, payload);
+        const response = await axios.post<AuthorizationResponse>(url, payload).catch((error) => {
+            throw new Error(error.response.data.message);
+        });
+
         axios.defaults.headers.common["Authorization"] =
-            "Bearer " + user.data.auth.access.token;
-        return user.data;
+            "Bearer " + response.data.auth.access.token;
+
+        return response.data;
     }
 }

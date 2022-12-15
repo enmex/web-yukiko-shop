@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import { errorState } from "../../app/states/Error.state";
 import { userState } from "../../app/states/User.state";
-import "../../styles/css/SignUp.css"
+import "../../styles/css/AuthForm.css"
 
 export const SignUp = () => {
     const [user, setUser] = useRecoilState(userState);
@@ -46,16 +46,16 @@ export const SignUp = () => {
         <>
         <div className="container">
             <form className="form" onSubmit={onSubmit}>
-                <div className="text-signup">Регистрация</div>
+                <div className="form-header">Регистрация</div>
                 <div className="input-form">
                     <input name="firstName" placeholder="Имя" onInput={handleInput}></input>
                     <input name="lastName" placeholder="Фамилия" onInput={handleInput}></input>
                     <input name="email" placeholder="Электронная почта" onInput={handleInput}></input>
                     <input name="password" placeholder="Пароль" type="password" onInput={handleInput}></input>
-                    <input placeholder="Повторите пароль" type="password"></input>
+                    <input name="passwordRepeat" placeholder="Повторите пароль" type="password"></input>
                 </div>
 
-                <button className="button-signup">Подтвердить</button>
+                <button className="submit-button">Подтвердить</button>
             </form>
         </div>
         </>
