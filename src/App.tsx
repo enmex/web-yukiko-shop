@@ -7,6 +7,8 @@ import { SignUp } from './pages/signup/SignUp';
 import { errorState } from './app/states/Error.state';
 import { ErrorPopup } from './components/ErrorPopup';
 import { Profile } from './pages/profile/Profile';
+import "./styles/css/App.css"
+import { CodeVerification } from './pages/codeverification/CodeVerification';
 
 const BaseRouter = () => {
   const [err, setErr] = useRecoilState(errorState);
@@ -25,6 +27,7 @@ const BaseRouter = () => {
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/profiles" element={<Profile />} />
+        <Route path="/verification" element={<CodeVerification />} />
       </Routes>
     </BrowserRouter>
     </>
@@ -33,9 +36,11 @@ const BaseRouter = () => {
 
 const App = () => {
   return (
-    <RecoilRoot>
-      <BaseRouter />
-    </RecoilRoot>
+    <div className='main-container'>
+      <RecoilRoot>
+        <BaseRouter />
+      </RecoilRoot>
+    </div>
   );
 };
 

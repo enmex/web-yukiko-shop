@@ -54,7 +54,7 @@ export const SignIn = () => {
         <>
         <div className="container">
             <form className="form" onSubmit={onSubmit}>
-                <text className="text-signin">Авторизация</text>
+                <div className="text-signin">Авторизация</div>
                 <div className="input-form">
                     <input placeholder="Электронная почта" className="input" onInput={handleInput}></input>
                     <input placeholder="Пароль" type="password" className="input" onInput={handleInput}></input>

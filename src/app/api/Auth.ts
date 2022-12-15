@@ -14,9 +14,17 @@ export type SignUpPayload = {
     lastName: string;
     email: string;
     password: string;
+    code: number;
 };
 
+export type SendVerifyCodePayload = {
+    email: string;
+}
+
 export type AuthorizationService = {
+    sendVerifyCode: (
+        payload: SendVerifyCodePayload
+    ) => void;
     signIn: (
         payload: SignInPayload
     ) => Promise<AuthorizationResponse>;
@@ -26,6 +34,13 @@ export type AuthorizationService = {
 }
 
 export const authService: AuthorizationService ={
+    sendVerifyCode: async (
+        payload: SendVerifyCodePayload
+    ) => {
+        const url = "http://" + Host + ":" + Port + "/auth/sendVerifyCode";
+        await axios.post(url, payload);
+    },
+
     signIn: async (
         payload: SignInPayload
     ): Promise<AuthorizationResponse> => {

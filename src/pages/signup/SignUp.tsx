@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { authService } from "../../app/api/Auth";
 import { errorState } from "../../app/states/Error.state";
 import { userState } from "../../app/states/User.state";
-import { User } from "../../app/types/User";
 import "../../styles/css/SignUp.css"
 
 export const SignUp = () => {
@@ -30,25 +28,14 @@ export const SignUp = () => {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
         try {
-            const apiResponse = await authService.signUp({
-                firstName: state.firstName,
-                lastName: state.lastName,
-                email: state.email,
-                password: state.password
+            setUser({
+                ...user,
+                profile: {
+                    ...state,
+                }
             });
 
-            const updatedUser: User = {
-                ...apiResponse,
-                profile: {
-                    ...apiResponse.profile,
-                    password: state.password,
-                }
-            }
-
-            setUser(updatedUser);
-            localStorage.setItem("user", JSON.stringify(apiResponse));
-
-            navigate("/");
+            navigate("/verification");
         } catch(e) {
             const message = e instanceof Error ? e.message : "unknown error";
             setErr(message);
@@ -59,7 +46,7 @@ export const SignUp = () => {
         <>
         <div className="container">
             <form className="form" onSubmit={onSubmit}>
-                <text className="text-signup">Регистрация</text>
+                <div className="text-signup">Регистрация</div>
                 <div className="input-form">
                     <input name="firstName" placeholder="Имя" onInput={handleInput}></input>
                     <input name="lastName" placeholder="Фамилия" onInput={handleInput}></input>

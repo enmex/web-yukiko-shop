@@ -3,6 +3,7 @@ import '../../styles/css/Welcome.css'
 import { useNavigate } from "react-router-dom"
 import { userAuthorized } from '../../app/states/User.state';
 import { useRecoilValue } from 'recoil';
+import "../../styles/css/Header.css"
 
 export const Welcome = () => {
     const authorized = useRecoilValue(userAuthorized);
@@ -11,11 +12,13 @@ export const Welcome = () => {
     const navigate = useNavigate();
     return (
         <>
-            <header>
-                <button className='header-button' onClick={() => {
+        <header className='header'>
+            <div className='navbar'>
+                <button className='navbar-button' onClick={() => {
                     authorized ? navigate("/profiles") : navigate("/signIn") }
                 }>{ buttonText }</button>
-            </header>
+            </div>
+        </header>
         </>
     );
 }
