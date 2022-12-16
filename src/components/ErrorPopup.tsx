@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { SetterOrUpdater } from "recoil";
-import "../styles/css/ErrorPopup.css"
 
 export const ErrorPopup = ({
   err,

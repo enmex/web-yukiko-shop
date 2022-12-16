@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import { errorState } from "../../app/states/Error.state";
 import { userState } from "../../app/states/User.state";
-import "../../styles/css/AuthForm.css"
+import { Container, Form, FormHeader, Input, InputForm, SubmitButton } from "./Styles";
 
 export const SignUp = () => {
     const [user, setUser] = useRecoilState(userState);
@@ -44,20 +44,20 @@ export const SignUp = () => {
 
     return (
         <>
-        <div className="container">
-            <form className="form" onSubmit={onSubmit}>
-                <div className="form-header">Регистрация</div>
-                <div className="input-form">
-                    <input name="firstName" placeholder="Имя" onInput={handleInput}></input>
-                    <input name="lastName" placeholder="Фамилия" onInput={handleInput}></input>
-                    <input name="email" placeholder="Электронная почта" onInput={handleInput}></input>
-                    <input name="password" placeholder="Пароль" type="password" onInput={handleInput}></input>
-                    <input name="passwordRepeat" placeholder="Повторите пароль" type="password"></input>
-                </div>
+        <Container>
+            <Form onSubmit={onSubmit}>
+                <FormHeader>Регистрация</FormHeader>
+                <InputForm>
+                    <Input name="firstName" placeholder="Имя" onInput={handleInput}></Input>
+                    <Input name="lastName" placeholder="Фамилия" onInput={handleInput}></Input>
+                    <Input name="email" placeholder="Электронная почта" onInput={handleInput}></Input>
+                    <Input name="password" placeholder="Пароль" type="password" onInput={handleInput}></Input>
+                    <Input name="passwordRepeat" placeholder="Повторите пароль" type="password"></Input>
+                </InputForm>
 
-                <button className="submit-button">Подтвердить</button>
-            </form>
-        </div>
+                <SubmitButton>Подтвердить</SubmitButton>
+            </Form>
+        </Container>
         </>
     );
 }

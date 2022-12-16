@@ -5,7 +5,7 @@ import { authService } from "../../app/api/Auth";
 import { errorState } from "../../app/states/Error.state";
 import { userState } from "../../app/states/User.state";
 import { User } from "../../app/types/User";
-import "../../styles/css/AuthForm.css"
+import { Container, Form, FormHeader, Input, InputForm, SubmitButton } from "./Styles";
 
 export const SignIn = () => {
     const [, setErr] = useRecoilState(errorState);
@@ -52,22 +52,20 @@ export const SignIn = () => {
 
     return (
         <>
-        <div className="container">
-            <form className="form" onSubmit={onSubmit}>
-                <div className="form-header">Авторизация</div>
-                <div className="input-form">
-                    <input placeholder="Электронная почта" className="input" onInput={handleInput}></input>
-                    <input placeholder="Пароль" type="password" className="input" onInput={handleInput}></input>
-                </div>
+        <Container>
+            <Form onSubmit={onSubmit}>
+                <FormHeader>Авторизация</FormHeader>
+                <InputForm>
+                    <Input placeholder="Электронная почта" className="input" onInput={handleInput}></Input>
+                    <Input placeholder="Пароль" type="password" className="input" onInput={handleInput}></Input>
+                </InputForm>
 
-                <div className="signup">
-                    <span className="text-signup">Впервые на сайте, анон-кун?</span>
-                    <a href="/signUp" className="a-signup">Зарегистрироваться</a>
-                </div>
+                <span className="text-signup">Впервые на сайте, анон-кун?</span>
+                <a href="/signUp" className="a-signup">Зарегистрироваться</a>
 
-                <button className="submit-button">Подтвердить</button>
-            </form>
-        </div>
+                <SubmitButton className="submit-button">Подтвердить</SubmitButton>
+            </Form>
+        </Container>
         </>
     )
 }

@@ -1,7 +1,13 @@
+import { Container, OrdersContainer, ProfileContainer } from "./Styles"
+
+
 export const Profile = () => {
     return (
         <>
-        <h1>Бипки</h1>
+        <Container>
+            <ProfileContainer>Здесь профиль</ProfileContainer>
+            <OrdersContainer>Здесь заказы</OrdersContainer>
+        </Container>
         </>
     );
 }

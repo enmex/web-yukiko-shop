@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { authService } from "../../app/api/Auth";
 import { errorState } from "../../app/states/Error.state";
 import { userAuthorized, userState } from "../../app/states/User.state";
-import "../../styles/css/AuthForm.css"
+import { Container, Form, FormHeader, InputForm, SubmitButton } from "./Styles";
 
 export const CodeVerification = () => {
     const authorized = useRecoilValue(userAuthorized);
@@ -66,16 +66,16 @@ export const CodeVerification = () => {
 
     return (
         <>
-        <div className="container">
-            <form className="form" onSubmit={onSubmit}>
-                <div className="form-header">Код верификации</div>
-                <div className="input-form">
+        <Container>
+            <Form onSubmit={onSubmit}>
+                <FormHeader>Код верификации</FormHeader>
+                <InputForm>
                     <input name="code" placeholder="Код верификации" className="input" onInput={handleInput}></input>
-                </div>
+                </InputForm>
 
-                <button className="submit-button">Подтвердить</button>
-            </form>
-        </div>
+                <SubmitButton className="submit-button">Подтвердить</SubmitButton>
+            </Form>
+        </Container>
         </>
     );
 }
