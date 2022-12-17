@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { userAuthorized } from "../../app/states/User.state"
-import { Button, Header, Logo, LogoButton, Nav, NavBar } from "./Styles";
+import { Button, Header, Nav, NavBar } from "./Styles";
 import { useNavigate } from "react-router";
 
 export const HeaderComponent = () => {
@@ -11,13 +11,11 @@ export const HeaderComponent = () => {
         <>
         <Header>
             <Nav>
-                <LogoButton>
-                    <Logo />
-                </LogoButton>
+                <Button onClick={() => navigate("/info")}>Главная</Button>
                 <NavBar>
-                    <Button onClick={
-                        () => {authorized ? navigate("/profile") : navigate("/signIn")}
-                    }>{ authorized ? "Личный кабинет" : "Войти" }</Button>
+                    <Button onClick={() => {authorized ? navigate("/profile") : navigate("/signIn")}}>{ authorized ? "Личный кабинет" : "Войти" }</Button>
+                    <Button onClick={() => navigate("/cart")}>Корзина</Button>
+                    <Button onClick={() => navigate("/about")}>О нас</Button>
                 </NavBar>
             </Nav>
         </Header>

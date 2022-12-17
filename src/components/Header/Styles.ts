@@ -36,14 +36,12 @@ export const Button = styled.button`
 `;
 
 export const LogoButton = styled.a`
+    background-color: #e9fb00;
     display: block;
     width: 10%;
 `;
 
-export const Logo = styled.div`
-    background: url(https://www.vhv.rs/dpng/d/569-5698519_pink-daisy-clipart-images-gallery-for-free-myreal.png);
-`;
-
 export const Nav = styled.div`
+    display: flex;
     width: 70%;
 `;
