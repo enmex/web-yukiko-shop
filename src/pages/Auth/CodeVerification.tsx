@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { authService } from "../../app/api/Auth";
 import { errorState } from "../../app/states/Error.state";
-import { userAuthorized, userState } from "../../app/states/User.state";
+import { userState } from "../../app/states/User.state";
 import { Container, Form, FormHeader, InputForm, SubmitButton } from "./Styles";
 
 export const CodeVerification = () => {
-    const authorized = useRecoilValue(userAuthorized);
     const [user, setUser] = useRecoilState(userState);
     const [, setErr] = useRecoilState(errorState);
     const [state, setState] = useState({
@@ -15,21 +14,6 @@ export const CodeVerification = () => {
     });
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        (async () => {
-            try {
-                if (!authorized) {
-                    await authService.sendVerifyCode({
-                        email: user.profile.email
-                    })
-                }
-            } catch (e) {
-                const message = e instanceof Error ? e.message : "unknown error";
-                setErr(message);
-            }
-        })()
-    }, [authorized, navigate, setErr, user.profile.email]);
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

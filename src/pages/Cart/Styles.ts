@@ -9,12 +9,12 @@ export const Button = styled.button`
     padding: 1em;
 `;
 
-export const ProductList = styled.div`
+export const ProductList = styled.ul`
     display: block;
     flex-direction: row;
 `;
 
-export const ProductEntry = styled.div`
+export const ProductEntry = styled.li`
     width: 100%;
     height: 10%;
     padding: 5%;

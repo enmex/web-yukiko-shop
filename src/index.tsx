@@ -10,8 +10,9 @@ const root = ReactDOM.createRoot(
 const Global = createGlobalStyle`
   body {
     margin: 0;
-    padding: 0;
-    font-family: "Gill Sans", sans-serif;
+    line-height: 1.47;
+    min-height: 100%;
+    font-family: PT Sans,Helvetica,Arial,sans-serif;
   }
 `;
 

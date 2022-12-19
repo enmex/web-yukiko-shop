@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const Header = styled.header`
     display: flex;
-    width: 100vw;
-    height: 5vh;
-    background-color: #8106A9;
+    padding: 1em;
+    background-color: #e6399b;
     justify-content: center;
     align-items: center;
 `;
@@ -14,9 +13,10 @@ export const NavBar = styled.nav`
     width: 90%;
     justify-content: center;
     align-items: center;
-`
+`;
 
 export const Button = styled.button`
+    color: #fff;
     font-size: 1em;
     padding: 0.5rem;
     padding-left: 1.5rem;
@@ -29,9 +29,8 @@ export const Button = styled.button`
     transition: 0.5s;
 
     &:hover {
-        border-top: none;
-        border-bottom: none;
-        background-color: #e9fb00;
+        background-color: #8106a9;
+        color: #000;
     }   
 `;
 

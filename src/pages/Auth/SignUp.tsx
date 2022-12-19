@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { errorState } from "../../app/states/Error.state";
 import { userState } from "../../app/states/User.state";
 import { Container, Form, FormHeader, Input, InputForm, SubmitButton } from "./Styles";
+import { authService } from "../../app/api/Auth";
 
 export const SignUp = () => {
     const [user, setUser] = useRecoilState(userState);
@@ -34,6 +35,10 @@ export const SignUp = () => {
                     ...state,
                 }
             });
+            
+            await authService.sendVerifyCode({
+                email: user.profile.email
+            })
 
             navigate("/verification");
         } catch(e) {
