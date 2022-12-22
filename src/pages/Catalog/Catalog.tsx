@@ -1,50 +1,63 @@
-import { useEffect, useState } from "react";
-import { ProductList } from "../Cart/Styles";
-import { Button, Container, ProductEntry, SearchButton, SearchContainer, SearchInput } from "./Styles";
-import { errorState } from "../../app/states/Error.state";
-import { useRecoilState } from "recoil";
-import { GetProductsPayload, productService } from "../../app/api/Product";
 import { useNavigate } from "react-router";
-import { productState } from "../../app/states/Product.state";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { useGetCategoriesQuery } from "../../app/store/category/category.api";
+import { setCategoryName } from "../../app/store/category/category.slice";
+import { CategoryButton } from "../../components/Button/CategoryButton";
+import { Loading } from "../../components/Loading/Loading";
+import { getRoles } from "@testing-library/react";
 
 export const Catalog = () => {
-    const [, setErr] = useRecoilState(errorState);
-    const [currentProduct, setCurrentProduct] = useRecoilState(productState);
-    const [products, setProducts] = useState<GetProductsPayload>({
-        products: [],
-    });
+    const dispatch = useAppDispatch();
+    const auth = useAppSelector(state => state.auth);
 
+    const {isLoading, isError, data: mainCategories} = useGetCategoriesQuery({
+        main: true,
+        leaf: null,
+    });
     const navigate = useNavigate();
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const apiResponse = await productService.getProducts();
-                setProducts(apiResponse);
-            } catch (e) {
-                const message = e instanceof Error ? e.message : "unknown error";
-                setErr(message);
-            }
-        })()
-    });
+    const onClickCategory = (categoryName: string) => {
+        try {
+            dispatch(setCategoryName(categoryName));
+            navigate("/catalog/" + categoryName);   
+        } catch (e) {
+            const message = e instanceof Error ? e.message : "unknown error";
+            console.log(message);
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <>
+            <Loading />
+            </>
+        );
+    }
+
+    if (!mainCategories || !mainCategories.length) {
+        return (
+            <>
+            <h1>Каталог пуст, милорд</h1>
+            <h2>Советую добавить категорий</h2>
+            <button className="bg-slate-500" onClick={() => navigate("/categories/create")}>Создать категорию</button>
+            </>
+        );
+    }
 
     return (
         <>
-        <Button onClick={() => {navigate("/products/edit")}}>Добавить товар</Button>
-        <Container>
-            <SearchContainer>
-                <SearchInput />
-                <SearchButton />
-            </SearchContainer>
-            <ProductList>
-                {products.products.map((product) => (
-                    <ProductEntry onClick={() => {
-                        setCurrentProduct(product);
-                        navigate("/catalog/" + product.name);
-                }}>{ product.name }</ProductEntry>
-                ))}
-            </ProductList>
-        </Container>
+        <div className="block justify-center">
+            <div className="flex justify-center p-4">
+                {mainCategories.map((category) => {
+                    return <CategoryButton key={category} photoUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOaVhh5NgLiJdQFdq1jEXPGW6B5eSXD2IRaRO4gQxk1zHp_vbzb47CQ_tEuBQ0bm-y_cE&usqp=CAU" onClick={() => onClickCategory(category)}>{category}</CategoryButton>;
+                })}
+            </div>
+            {
+                auth.accessType === "ADMIN"
+                 ? (<button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</button>)
+                 : (<></>)
+            }
+        </div>
         </>
     );
 }

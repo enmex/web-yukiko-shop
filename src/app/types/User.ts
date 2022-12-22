@@ -1,18 +1,18 @@
-export type User = {
-    auth: {
-        access: {
-            token: string;
-            expiresAt: number | null;
-        };
-        refresh: {
-            token: string;
-            expiresAt: number | null;
-        };
+export type Auth = {
+    access: {
+        token: string;
+        expiresAt: number;
     };
-    profile: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-    }
+    refresh: {
+        token: string;
+        expiresAt: number;
+    };
+    accessType: string;
+}
+
+export type User = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }

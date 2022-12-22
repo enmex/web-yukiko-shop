@@ -1,5 +1,8 @@
+import { Product } from "./Product";
+
 export type Category = {
     name: string;
-    parent: Category | null;
+    parent: string | null;
     children: Category[];
+    products: Product[];
 }

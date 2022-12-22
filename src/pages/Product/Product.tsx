@@ -1,16 +1,16 @@
-import { productState } from "../../app/states/Product.state";
-import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router";
 import { Container, ProductDescription, ProductName, ProductPhoto } from "./Styles";
 
 export const ProductInfo = () => {
-    const [product] = useRecoilState(productState);
+    const navigate = useNavigate();
 
     return (
         <>
         <Container>
             <ProductPhoto />
-            <ProductName>{ product.name }</ProductName>
-            <ProductDescription>{ product.description }</ProductDescription>
+            <ProductName>{ }</ProductName>
+            <ProductDescription>{  }</ProductDescription>
+            <button onClick={() => navigate("products/edit")}>Редактировать</button>
         </Container>
         </>
     );

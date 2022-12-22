@@ -1,49 +1,57 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState } from "recoil";
-import { errorState } from "../../app/states/Error.state";
-import { userState } from "../../app/states/User.state";
 import { Container, Form, FormHeader, Input, InputForm, SubmitButton } from "./Styles";
-import { authService } from "../../app/api/Auth";
+import { useSignUpMutation } from "../../app/store/auth/auth.api";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { setToken } from "../../app/store/auth/auth.slice";
 
 export const SignUp = () => {
-    const [user, setUser] = useRecoilState(userState);
-    const [, setErr] = useRecoilState(errorState);
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(state => state.auth);
     const [state, setState] = useState({
-        firstName: user.profile.firstName ?? "",
-        lastName: user.profile.lastName ?? "",
-        email: user.profile.email ?? "",
-        password: user.profile.password ?? "",
+        firstName: "",
+        lastName: "",
+        email: user.email,
+        password: "",
+        code: 0,
     });
+    
+    const [signUp] = useSignUpMutation();
 
     const navigate = useNavigate();
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setState({
-          ...state,
-          [e.target.name]: e.target.value,
-        });
+        if (e.target.name === "code") {
+            const value = parseInt(e.target.value);
+            setState({
+                ...state,
+                code: value,
+            });
+        } else {
+            setState({
+                ...state,
+                [e.target.name]: e.target.value,
+            });
+        }
     };
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
         try {
-            setUser({
-                ...user,
-                profile: {
-                    ...state,
-                }
-            });
-            
-            await authService.sendVerifyCode({
-                email: user.profile.email
-            })
-
-            navigate("/verification");
+            signUp({
+                firstName: state.firstName,
+                lastName: state.lastName,
+                email: state.email,
+                password: state.password,
+                code: state.code,
+            }).unwrap().then((token) => {
+                dispatch(setToken(token));
+            });      
+            navigate("/");
         } catch(e) {
             const message = e instanceof Error ? e.message : "unknown error";
-            setErr(message);
+            console.log(message);
         }
     }
 
@@ -55,9 +63,8 @@ export const SignUp = () => {
                 <InputForm>
                     <Input name="firstName" placeholder="Имя" onInput={handleInput}></Input>
                     <Input name="lastName" placeholder="Фамилия" onInput={handleInput}></Input>
-                    <Input name="email" placeholder="Электронная почта" onInput={handleInput}></Input>
                     <Input name="password" placeholder="Пароль" type="password" onInput={handleInput}></Input>
-                    <Input name="passwordRepeat" placeholder="Повторите пароль" type="password"></Input>
+                    <Input name="code" placeholder="Код верификации" onInput={handleInput}></Input>
                 </InputForm>
 
                 <SubmitButton>Подтвердить</SubmitButton>

@@ -1,14 +1,16 @@
 import React from "react";
-import { Aside } from "./Styles";
+import { Aside, Container } from "./Styles";
 
 export const AsideComponent = (props: {
     children: JSX.Element[]
 }) => {
     return (
         <>
-        <Aside>
-            { props.children }
-        </Aside>
+        <Container>
+            <Aside>
+                { props.children }
+            </Aside>
+        </Container>
         </>
     );
 }

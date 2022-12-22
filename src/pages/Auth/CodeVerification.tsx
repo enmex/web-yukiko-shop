@@ -1,51 +1,34 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState } from "recoil";
-import { authService } from "../../app/api/Auth";
-import { errorState } from "../../app/states/Error.state";
-import { userState } from "../../app/states/User.state";
 import { Container, Form, FormHeader, InputForm, SubmitButton } from "./Styles";
+import { useSendVerifyCodeMutation } from "../../app/store/auth/auth.api";
+import { useAppDispatch } from "../../app/store";
+import { setEmail } from "../../app/store/auth/auth.slice";
 
 export const CodeVerification = () => {
-    const [user, setUser] = useRecoilState(userState);
-    const [, setErr] = useRecoilState(errorState);
-    const [state, setState] = useState({
-        code: 0,
-    });
+    const dispatch = useAppDispatch();
+    const [sendVerifyCode] = useSendVerifyCodeMutation();
+    const [input, setInput] = useState("");
 
     const navigate = useNavigate();
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try { 
-            const apiResponse = await authService.signUp({
-                firstName: user.profile.firstName,
-                lastName: user.profile.lastName,
-                password: user.profile.password,
-                email: user.profile.email,
-                code: state.code,
+            sendVerifyCode({
+                email: input,
             });
-
-            setUser(apiResponse);
-            localStorage.setItem("user", JSON.stringify(apiResponse));
-            navigate("/")
+            dispatch(setEmail(input));
+            navigate("/signUp");
         } catch (e) {
             const message = e instanceof Error ? e.message : "unknown error";
-            setErr(message);
+            console.log(message);
         }
     }
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault(); 
-        try {
-            const value = parseInt(e.target.value);
-            setState({
-                code: value,
-            });
-        } catch(e) {
-            const message = e instanceof Error ? e.message : "unknown error";
-            setErr(message);
-        }
+        setInput(e.target.value);
     };
 
     return (
@@ -54,7 +37,7 @@ export const CodeVerification = () => {
             <Form onSubmit={onSubmit}>
                 <FormHeader>Код верификации</FormHeader>
                 <InputForm>
-                    <input name="code" placeholder="Код верификации" className="input" onInput={handleInput}></input>
+                    <input name="email" placeholder="Почта" className="input" onInput={handleInput}></input>
                 </InputForm>
 
                 <SubmitButton className="submit-button">Подтвердить</SubmitButton>
@@ -63,3 +46,4 @@ export const CodeVerification = () => {
         </>
     );
 }
+

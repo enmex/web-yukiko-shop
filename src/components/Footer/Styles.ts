@@ -5,7 +5,7 @@ export const Footer = styled.footer`
     width: 100vw;
     min-height: 5vh;
     max-height: 15vh;
-    background-color: #8000ff;
+    background-color: #0a0006;
     margin-bottom: 0;
     margin-top: auto;
     text-align: center;
@@ -14,6 +14,7 @@ export const Footer = styled.footer`
 `;
 
 export const Span = styled.span`
+    color: #fff;
     font-size: 1em;
     font-family: monospace;
 `;

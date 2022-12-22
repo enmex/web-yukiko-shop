@@ -1,13 +1,17 @@
-import { useRecoilState } from "recoil";
-import { productState } from "../../app/states/Product.state";
 import React, { useState } from "react";
-import { errorState } from "../../app/states/Error.state";
-import { productService } from "../../app/api/Product";
-import { Container, ProductDescription, ProductName, ProductPhoto } from "./Styles";
+import { Container } from "./Styles";
+import { useCreateProductMutation } from "../../app/store/product/product.api";
+import { useAppSelector } from "../../app/store";
+import { useGetCategoriesQuery } from "../../app/store/category/category.api";
 
 export const ProductEdit = () => {
-    const [, setErr] = useRecoilState(errorState);
-    const [product] = useRecoilState(productState);
+    const [createProduct, {isLoading}] = useCreateProductMutation();
+    const parentCategory = useAppSelector(state => state.category);
+    const {data: categories} = useGetCategoriesQuery({
+        main: null,
+        leaf: true,
+    });
+
     const [state, setState] = useState({
         name: "",
         description: "",
@@ -35,21 +39,45 @@ export const ProductEdit = () => {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await productService.createProduct({
-                ...state,
+            createProduct({
+                name: state.name,
+                description: state.description,
+                price: state.price,
+                categoryName: state.categoryName,
+                path: state.path
             });
+            
         } catch (e) {
             const message = e instanceof Error ? e.message : "unknown error";
-            setErr(message);
+            console.log(message);
         }
+    }
+
+    const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.preventDefault();
+        console.log("here");
+        setState({
+            ...state,
+             categoryName: e.target.value
+        });
     }
 
     return (
         <>
         <Container>
-            <ProductPhoto />
-            <ProductName>{ product.name }</ProductName>
-            <ProductDescription>{ product.description }</ProductDescription>
+            <div>Создание товара</div>
+            <form onSubmit={onSubmit}>
+                <input name="name" placeholder="Наименование товара" onInput={handleInput}></input>
+                <input name="description" placeholder="Описание товара" onInput={handleInput}></input>
+                <input name="price" placeholder="Цена товара" type="number" onInput={handleInput}></input>
+                <select onChange={onSelect}>
+                    <option selected disabled hidden>Категория</option>
+                    {categories?.map((category) => {
+                        return <option key={category}>{ category }</option>
+                    })}
+                </select>
+                <button>Подтвердить</button>
+            </form>
         </Container>
         </>
     );

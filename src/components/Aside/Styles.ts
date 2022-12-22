@@ -1,7 +1,15 @@
 import styled from "styled-components";
 
-export const Aside = styled.aside`
+export const Container = styled.aside`
+    padding: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 15%;
-    border-right: 5px solid #0389cc;
-    background-color: #9f3ed5;
+    border: 1px solid black;
+`;
+
+export const Aside = styled(Container)`
+    border: 1px solid pink;
+    width: 25%;
 `;
