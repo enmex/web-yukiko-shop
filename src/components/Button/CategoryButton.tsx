@@ -1,20 +1,19 @@
-import { FormEventHandler } from "react";
+import { Button } from "antd";
+import { MouseEventHandler } from "react";
 
 export const CategoryButton = (props: {
-    children: string,
-    onClick: FormEventHandler<HTMLFormElement>,
+    onClick: MouseEventHandler<HTMLAnchorElement> & MouseEventHandler<HTMLButtonElement>,
     photoUrl: string,
 }) => {
     return (
         <>
-        <form onClick={props.onClick} className="relative w-1/2 px-[10rem] cursor-pointer">
-            <img src={props.photoUrl} className="flex object-contain hover:object-scale-down" alt="dummy"/>
-            <button 
-                className="flex" 
-            >
-                {props.children}
-            </button>
-        </form>
+        <Button onClick={props.onClick} className="flex flex-wrap justify-center">
+            <img
+                src={props.photoUrl}
+                className="max-w-sm h-auto transition-shadow ease-in-out duration-300 shadow-none hover:shadow-xl"
+                alt=""
+            />
+        </Button>
         </>
     );
 }

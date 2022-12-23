@@ -73,7 +73,7 @@ export const ProductEdit = () => {
                 <select onChange={onSelect}>
                     <option selected disabled hidden>Категория</option>
                     {categories?.map((category) => {
-                        return <option key={category}>{ category }</option>
+                        return <option key={category.name}>{ category.name }</option>
                     })}
                 </select>
                 <button>Подтвердить</button>

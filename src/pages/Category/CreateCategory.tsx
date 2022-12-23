@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useCreateCategoryMutation, useGetCategoriesQuery } from "../../app/store/category/category.api";
 import { Loading } from "../../components/Loading/Loading";
+import { Button, Form, Input, Layout, Select } from "antd";
+import { NavBar } from "../../components/NavBar/Navbar";
 
 export const CreateCategory = () => {
     const [createCategory] = useCreateCategoryMutation();
@@ -24,18 +26,12 @@ export const CreateCategory = () => {
         });
     }
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            createCategory(currentCategory);
-            setCurrentCategory({
-                parent: null,
-                name: ""
-            })
-        } catch (e) {
-            const message = e instanceof Error ? e.message : "unknown error";
-            console.log(message);
-        }
+    const onSubmit = () => {
+        createCategory(currentCategory);
+        setCurrentCategory({
+            parent: null,
+            name: ""
+        });
     }
 
     const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,20 +54,27 @@ export const CreateCategory = () => {
 
     return (
         <>
-        <form className="flex flex-col w-1/2 justify-center" onSubmit={onSubmit}>
-            <select onChange={onSelect}>
-                <option key="no parent">Без родительской категории</option>
-                {
-                    data ? (
-                        data.map((category) => {
-                            return <option key={category}>{ category }</option>
-                        })
-                    ) : (<></>)
-                }
-            </select>
-            <input name="name" placeholder="Категория" onInput={handleInput}></input>
-            <button className="bg-red-500">Создать</button>
-        </form>
+        <Layout>
+            <NavBar />
+            <h1 className="ml-2 mt-4 font-mono">Создание категории</h1>
+            <Form className="flex flex-col justify-center p-5" onFinish={onSubmit}>
+                <Form.Item>
+                    <Select onChange={onSelect}>
+                        {
+                            data ? (
+                                data.map((category) => {
+                                    return <Select.Option key={category.name}>{ category.name }</Select.Option>
+                                })
+                            ) : (<></>)
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Input placeholder="Наименование категории" onInput={handleInput}/>
+                </Form.Item>
+                <Form.Item><Button>Создать</Button></Form.Item>
+            </Form>
+        </Layout>
         </>
     );
 }

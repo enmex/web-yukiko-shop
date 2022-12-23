@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/store";
-import { Container, OrdersContainer, ProfileContainer } from "./Styles"
 import { useNavigate } from "react-router";
+import Layout from "antd/es/layout/layout";
+import { NavBar } from "../../components/NavBar/Navbar";
 
 
 export const Profile = () => {
@@ -16,10 +17,10 @@ export const Profile = () => {
 
     return (
         <>
-        <Container>
-            <ProfileContainer>Здесь профиль</ProfileContainer>
-            <OrdersContainer>Здесь заказы</OrdersContainer>
-        </Container>
+        <Layout>
+            <NavBar />
+            <h1>Здесь будет профиль</h1>
+        </Layout>
         </>
     );
 }

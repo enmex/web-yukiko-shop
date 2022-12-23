@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-import { CreateCategoryPayload, GetCategoryPayload, GetCategoryResponse } from "./category.types";
+import { CreateCategoryPayload, GetCategoriesResponse, GetCategoryPayload, GetCategoryResponse } from "./category.types";
 import { Auth } from "../../types/User";
 
 export const categoryApi = createApi({
@@ -15,12 +15,12 @@ export const categoryApi = createApi({
         }
     }),
     endpoints: build => ({
-        getCategories: build.query<string[], GetCategoryPayload>({
+        getCategories: build.query<GetCategoriesResponse, GetCategoryPayload>({
             query: (payload) => ({
                 url: payload.main ? `?main=${payload.main}` : payload.leaf ? `?leaf=${payload.leaf}` : ''
             })
         }),
-        getSubCategories: build.query<string[], string>({
+        getSubCategories: build.query<GetCategoriesResponse, string>({
             query: (categoryName: string) => ({
                 url: `/children/${categoryName}`
             })

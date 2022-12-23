@@ -1,8 +1,9 @@
 import { Category } from "../../types/Category";
 
 export type GetCategoriesResponse = {
-    categories: string[];
-};
+    name: string;
+    photoUrl: string;
+}[];
 
 export type GetCategoryResponse = Category;
 
@@ -15,3 +16,4 @@ export type GetCategoryPayload = {
     main: boolean | null;
     leaf: boolean | null;
 }
+

@@ -2,28 +2,24 @@ import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { useGetCategoriesQuery } from "../../app/store/category/category.api";
 import { setCategoryName } from "../../app/store/category/category.slice";
-import { CategoryButton } from "../../components/Button/CategoryButton";
 import { Loading } from "../../components/Loading/Loading";
-import { getRoles } from "@testing-library/react";
+import { Button, Form, Layout } from "antd";
+import { NavBar } from "../../components/NavBar/Navbar";
+import { CategoryButton } from "../../components/Button/CategoryButton";
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
     const auth = useAppSelector(state => state.auth);
 
-    const {isLoading, isError, data: mainCategories} = useGetCategoriesQuery({
+    const {isLoading, data: mainCategories} = useGetCategoriesQuery({
         main: true,
         leaf: null,
     });
     const navigate = useNavigate();
 
     const onClickCategory = (categoryName: string) => {
-        try {
-            dispatch(setCategoryName(categoryName));
-            navigate("/catalog/" + categoryName);   
-        } catch (e) {
-            const message = e instanceof Error ? e.message : "unknown error";
-            console.log(message);
-        }
+        dispatch(setCategoryName(categoryName));
+        navigate("/catalog/" + categoryName);   
     }
 
     if (isLoading) {
@@ -37,27 +33,37 @@ export const Catalog = () => {
     if (!mainCategories || !mainCategories.length) {
         return (
             <>
-            <h1>Каталог пуст, милорд</h1>
-            <h2>Советую добавить категорий</h2>
-            <button className="bg-slate-500" onClick={() => navigate("/categories/create")}>Создать категорию</button>
+            <Layout>
+                <NavBar />
+                <Form className="flex justify-center">
+                    <Form.Item>
+                        <h1>Каталог пуст, милорд</h1>
+                        <h2>Советую добавить категорий</h2>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>
+                    </Form.Item>
+                </Form>
+            </Layout>
             </>
         );
     }
 
     return (
         <>
-        <div className="block justify-center">
-            <div className="flex justify-center p-4">
-                {mainCategories.map((category) => {
-                    return <CategoryButton key={category} photoUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOaVhh5NgLiJdQFdq1jEXPGW6B5eSXD2IRaRO4gQxk1zHp_vbzb47CQ_tEuBQ0bm-y_cE&usqp=CAU" onClick={() => onClickCategory(category)}>{category}</CategoryButton>;
-                })}
-            </div>
-            {
-                auth.accessType === "ADMIN"
-                 ? (<button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</button>)
-                 : (<></>)
-            }
-        </div>
+        <Layout>
+            <NavBar />
+                <div className="flex justify-center p-4">
+                    {mainCategories.map((category) => {
+                        return <CategoryButton onClick={() => onClickCategory(category.name)} photoUrl={category.photoUrl} />
+                    })}
+                </div>
+                {
+                    auth.accessType === "ADMIN"
+                    ? (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
+                    : (<></>)
+                }
+        </Layout>
         </>
     );
 }

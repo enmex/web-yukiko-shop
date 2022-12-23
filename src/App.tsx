@@ -1,10 +1,9 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Welcome } from "./pages/Welcome/Welcome"
 import { SignIn } from './pages/Auth/SignIn';
 import { SignUp } from './pages/Auth/SignUp';
 import { Profile } from './pages/Profile/Profile';
 import { CodeVerification } from './pages/Auth/CodeVerification';
-import { HeaderComponent } from "./components/Header/Header";
 import { Cart } from "./pages/Cart/Cart";
 import { About } from "./pages/About/About";
 import { Catalog } from "./pages/Catalog/Catalog";
@@ -23,7 +22,6 @@ const BaseRouter = () => {
   return (
     <>
     <BrowserRouter>
-      <HeaderComponent />
         <Routes>
           <Route path="*" element={<NotFound/>}/>
           <Route path="/" element={<Welcome/>} />
