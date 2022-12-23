@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { CreateProductPayload } from "./product.types";
 import { Auth } from "../../types/User";
+import { Product } from "../../types/Product";
 
 export const productApi = createApi({
     reducerPath: 'api/product',
@@ -15,7 +16,7 @@ export const productApi = createApi({
         }
     }),
     endpoints: build => ({
-        getProduct: build.query<string[], string>({
+        getProduct: build.query<Product, string>({
             query: (id: string) => ({
                 url: `/${id}`
             })

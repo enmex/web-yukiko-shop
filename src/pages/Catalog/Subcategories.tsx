@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/store";
 import { useGetCategoryQuery } from "../../app/store/category/category.api";
 import { setCategoryName } from "../../app/store/category/category.slice";
 import { useEffect } from "react";
+import { setProductId } from "../../app/store/product/product.slice";
 
 export const Subcategories = () => {
     const dispatch = useAppDispatch();
@@ -10,7 +11,9 @@ export const Subcategories = () => {
     const auth = useAppSelector(state => state.auth);
     const navigate = useNavigate();
 
-    const {data: category} = useGetCategoryQuery(currentCategory.name);
+    const {data: category} = useGetCategoryQuery(currentCategory.name, {
+        skip: currentCategory.name.length === 0
+    });
 
     useEffect(() => {
         const splits = window.location.href.split('/');
@@ -29,16 +32,29 @@ export const Subcategories = () => {
         }
     }
 
+    const onClickProduct = (id: string) => {
+        try {
+            dispatch(setProductId(id));
+            navigate('/products/' + id);
+        } catch (e) {
+            const message = e instanceof Error ? e.message : "unknown error";
+            console.log(message);
+        }           
+    }
+
     if (!category?.children || category.children.length === 0) {
-        const productList = category?.products || category?.products.length === 0
+        const productList = !category?.products || category?.products.length === 0
              ? "Товаров нет, милорд"
              : category?.products.map((product) => {
-                return <div className="container">{ product.name }</div>
+                return <button
+                     key={product.name} 
+                     className="container  bg-green-400"
+                     onClick={() => onClickProduct(product.id)}>{ product.name }</button>
              });
         return (
             <>
-            <div>
-                Тут должен быть список товаров
+            <div className="flex flex-col justify-center">
+                {productList}
                 {
                     auth.accessType === "ADMIN"
                     ? (<button onClick={() => navigate("/products/edit")}>Добавить товар</button>)

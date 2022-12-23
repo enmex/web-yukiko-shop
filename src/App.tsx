@@ -17,6 +17,7 @@ import { Auth } from "./app/types/User";
 import { Subcategories } from "./pages/Catalog/Subcategories";
 import "./index.css";
 import { NotFound } from "./pages/404";
+import { ProductInfo } from "./pages/Product/Product";
 
 const BaseRouter = () => {
   return (
@@ -35,6 +36,7 @@ const BaseRouter = () => {
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/catalog/*" element={<Subcategories />} />
           <Route path="/products/edit" element={<ProductEdit />} />
+          <Route path="/products/*" element={<ProductInfo />} />
           <Route path="/categories/create" element={<CreateCategory />} />
         </Routes>
     </BrowserRouter>

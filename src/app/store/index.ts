@@ -5,6 +5,7 @@ import { authReducer } from "./auth/auth.slice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { categoryReducer } from "./category/category.slice";
 import { productApi } from "./product/product.api";
+import { productReducer } from "./product/product.slice";
 
 export const store = configureStore({
     reducer: {
@@ -13,8 +14,14 @@ export const store = configureStore({
 
         category: categoryReducer,
         [categoryApi.reducerPath]: categoryApi.reducer,
+
+        product: productReducer,
+        [productApi.reducerPath]: productApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware).concat(categoryApi.middleware)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(authApi.middleware)
+        .concat(categoryApi.middleware)
+        .concat(productApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

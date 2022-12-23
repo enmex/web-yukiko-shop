@@ -1,3 +1,7 @@
+export type ProductState = {
+    id: string;
+}
+
 export type CreateProductPayload = {
     name: string;
     description: string;
