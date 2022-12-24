@@ -3,9 +3,10 @@ export type ProductState = {
 }
 
 export type CreateProductPayload = {
+    id: string;
     name: string;
     description: string;
-    path: string;
+    photoUrl: string | null;
     price: number;
     categoryName: string;
 }

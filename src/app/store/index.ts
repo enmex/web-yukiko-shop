@@ -6,6 +6,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { categoryReducer } from "./category/category.slice";
 import { productApi } from "./product/product.api";
 import { productReducer } from "./product/product.slice";
+import { photoApi } from "./photo/photo.api";
+import { photoReducer } from "./photo/photo.slice";
 
 export const store = configureStore({
     reducer: {
@@ -17,11 +19,15 @@ export const store = configureStore({
 
         product: productReducer,
         [productApi.reducerPath]: productApi.reducer,
+
+        photo: photoReducer,
+        [photoApi.reducerPath]: photoApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(authApi.middleware)
         .concat(categoryApi.middleware)
         .concat(productApi.middleware)
+        .concat(photoApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;
