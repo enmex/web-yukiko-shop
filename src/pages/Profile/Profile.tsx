@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppSelector } from "../../app/store";
 import { useNavigate } from "react-router";
 import Layout from "antd/es/layout/layout";
-import { NavBar } from "../../components/NavBar/Navbar";
+import { Navbar } from "../../components/Navbar/Navbar";
 
 
 export const Profile = () => {
@@ -18,7 +18,7 @@ export const Profile = () => {
     return (
         <>
         <Layout>
-            <NavBar />
+            <Navbar />
             <h1>Здесь будет профиль</h1>
         </Layout>
         </>

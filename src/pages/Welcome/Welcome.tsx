@@ -1,5 +1,5 @@
 import { Carousel, Layout } from "antd";
-import { NavBar } from "../../components/NavBar/Navbar";
+import { Navbar } from "../../components/Navbar/Navbar";
 
 const contentStyle: React.CSSProperties = {
     height: '160px',
@@ -13,7 +13,7 @@ export const Welcome = () => {
     return (
         <>
         <Layout>
-            <NavBar />
+            <Navbar />
             <Carousel autoplay>
                 <div>
                     <h3 style={contentStyle}>1</h3>

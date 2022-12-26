@@ -2,20 +2,22 @@ import React, { useState } from "react";
 import { useCreateCategoryMutation, useGetCategoriesQuery } from "../../app/store/category/category.api";
 import { Loading } from "../../components/Loading/Loading";
 import { Button, Form, Input, Layout, Select } from "antd";
-import { NavBar } from "../../components/NavBar/Navbar";
+import { ImageUpload } from "../../components/ImageUpload/ImageUpload";
+import { Navbar } from "../../components/Navbar/Navbar";
 
 export const CreateCategory = () => {
     const [createCategory] = useCreateCategoryMutation();
-    const { isLoading, data } = useGetCategoriesQuery({
-        main: false,
-        leaf: null,
-    });
+    const { isLoading, data } = useGetCategoriesQuery({});
     const [currentCategory, setCurrentCategory] = useState<{
         parent: string | null,
         name: string,
+        photoUrl: string
+        id: string
     }>({
+        id: "",
         parent: null,
         name: "",
+        photoUrl: "",
     });
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +31,8 @@ export const CreateCategory = () => {
     const onSubmit = () => {
         createCategory(currentCategory);
         setCurrentCategory({
+            id: "",
+            photoUrl: "",
             parent: null,
             name: ""
         });
@@ -52,27 +56,37 @@ export const CreateCategory = () => {
         );
     }
 
+    const onImageChange = (id: string, photoUrl: string) => {
+        setCurrentCategory({
+            ...currentCategory,
+            id: id,
+            photoUrl: photoUrl
+        })
+    }
+
     return (
         <>
         <Layout>
-            <NavBar />
-            <h1 className="ml-2 mt-4 font-mono">Создание категории</h1>
-            <Form className="flex flex-col justify-center p-5" onFinish={onSubmit}>
+            <Navbar />
+            <h1 className="ml-2 mt-4 font-mono">Создание товара</h1>
+            <Form onFinish={onSubmit}>
+                <Form.Item>
+                    <ImageUpload 
+                        setStateCallback={onImageChange}
+                        photoUrl={currentCategory.photoUrl}
+                        />
+                </Form.Item>
+                <Form.Item>
+                    <Input name="name" placeholder="Наименование категории" onInput={handleInput}></Input>
+                </Form.Item>
                 <Form.Item>
                     <Select onChange={onSelect}>
-                        {
-                            data ? (
-                                data.map((category) => {
-                                    return <Select.Option key={category.name}>{ category.name }</Select.Option>
-                                })
-                            ) : (<></>)
-                        }
+                        {data?.map((category) => {
+                            return <Select.Option key={category.name}>{ category.name }</Select.Option>
+                        })}
                     </Select>
                 </Form.Item>
-                <Form.Item>
-                    <Input placeholder="Наименование категории" onInput={handleInput}/>
-                </Form.Item>
-                <Form.Item><Button>Создать</Button></Form.Item>
+                <Button onClick={onSubmit}>Подтвердить</Button>
             </Form>
         </Layout>
         </>

@@ -1,24 +1,21 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { CreateCategoryPayload, GetCategoriesResponse, GetCategoryPayload, GetCategoryResponse } from "./category.types";
-import { Auth } from "../../types/User";
+import { RootState } from "..";
+
 
 export const categoryApi = createApi({
     reducerPath: 'api/category',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/categories',
-        prepareHeaders: (headers) => {
-            const cache = localStorage.getItem('token');
-            if (cache) {
-                const auth = JSON.parse(cache) as Auth;
-                headers.set('Authorization', 'Bearer ' + auth.access.token);
-            }
+        prepareHeaders: (headers, { getState }) => {
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).auth.token);
         }
     }),
     endpoints: build => ({
         getCategories: build.query<GetCategoriesResponse, GetCategoryPayload>({
             query: (payload) => ({
-                url: payload.main ? `?main=${payload.main}` : payload.leaf ? `?leaf=${payload.leaf}` : ''
-            })
+                url: payload.type ? `?type=${payload.type}` : ''
+            }),
         }),
         getSubCategories: build.query<GetCategoriesResponse, string>({
             query: (categoryName: string) => ({
@@ -48,7 +45,7 @@ export const {
 } = categoryApi;
 
 export const {
-    getCategories: getMainCategories,
+    getCategories,
     getSubCategories,
     getCategory
 } = categoryApi.endpoints;

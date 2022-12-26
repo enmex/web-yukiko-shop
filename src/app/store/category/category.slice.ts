@@ -2,7 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Category } from "../../types/Category";
 
 export const initialState: Category = {
+    id: "",
     name: "",
+    photoUrl: "",
     parent: null,
     products: [],
     children: [],
@@ -12,11 +14,11 @@ const categorySlice = createSlice({
     name: "category",
     initialState: initialState,
     reducers: {
-        setCategoryName: (state, action: PayloadAction<string>) => {
-            state.name = action.payload;
+        setCategory: (state, action: PayloadAction<string>) => {
+            state.id = action.payload;
         }
     }
 });
 
-export const { setCategoryName } = categorySlice.actions;
+export const { setCategory } = categorySlice.actions;
 export const categoryReducer = categorySlice.reducer;

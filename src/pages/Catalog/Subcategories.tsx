@@ -1,9 +1,15 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { useGetCategoryQuery } from "../../app/store/category/category.api";
-import { setCategoryName } from "../../app/store/category/category.slice";
-import { useEffect } from "react";
+import { setCategory } from "../../app/store/category/category.slice";
 import { setProductId } from "../../app/store/product/product.slice";
+import { Button, Layout } from "antd";
+import { CategoryButton } from "../../components/Button/CategoryButton";
+import { ProductButton } from "../../components/Button/ProductButton";
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Product } from "../../app/types/Product";
+import { translit } from "../../utils/translit";
+import { Category } from "../../app/types/Category";
 
 export const Subcategories = () => {
     const dispatch = useAppDispatch();
@@ -11,31 +17,19 @@ export const Subcategories = () => {
     const auth = useAppSelector(state => state.auth);
     const navigate = useNavigate();
 
-    const {data: category} = useGetCategoryQuery(currentCategory.name, {
-        skip: currentCategory.name.length === 0
+    const {data: category} = useGetCategoryQuery(currentCategory.id, {
+        skip: currentCategory.id.length === 0
     });
 
-    useEffect(() => {
-        const splits = window.location.href.split('/');
-        const category = splits[splits.length - 1];
-
-        dispatch(setCategoryName(category));
-    });
-
-    const onClickCategory = (categoryName: string) => {
-        try {
-            dispatch(setCategoryName(categoryName));
-            navigate("/catalog/" + categoryName);   
-        } catch (e) {
-            const message = e instanceof Error ? e.message : "unknown error";
-            console.log(message);
-        }
+    const onClickCategory = (category: Category) => {
+        dispatch(setCategory(category.id));
+        navigate("/catalog/" + translit(category.name));   
     }
 
-    const onClickProduct = (id: string) => {
+    const onClickProduct = (product: Product) => {
         try {
-            dispatch(setProductId(id));
-            navigate('/products/' + id);
+            dispatch(setProductId(product.id));
+            navigate('/products/' + translit(product.name));
         } catch (e) {
             const message = e instanceof Error ? e.message : "unknown error";
             console.log(message);
@@ -46,39 +40,49 @@ export const Subcategories = () => {
         const productList = !category?.products || category?.products.length === 0
              ? "Товаров нет, милорд"
              : category?.products.map((product) => {
-                return <button
-                     key={product.name} 
-                     className="container  bg-green-400"
-                     onClick={() => onClickProduct(product.id)}>{ product.name }</button>
+                return <ProductButton
+                        key={product.id} 
+                        buttonText={product.name}
+                        photoUrl={product.photoUrl}
+                        onClick={() => onClickProduct(product)}
+                    />
              });
         return (
             <>
-            <div className="flex flex-col justify-center">
-                {productList}
+            <Layout>
+                <Navbar />
+                <Layout className="flex justify-center">
+                    {productList}
+                </Layout>
                 {
                     auth.accessType === "ADMIN"
                     ? (<button onClick={() => navigate("/products/edit")}>Добавить товар</button>)
                     : (<></>)
                 }
-            </div>
+            </Layout>
             </>
         );
     }
 
     return (
         <>
-        <div className="container justify-center">
-            <div className="flex justify-around p-4">
+        <Layout className="container justify-center">
+            <Layout className="flex justify-around p-4">
                 {category.children.map((category) => {
-                    return <button className="bg-red-500" key={category.name} onClick={() => onClickCategory(category.name)}>{category.name}</button>;
+                    return <CategoryButton 
+                        key={category.id} 
+                        buttonText={category.name}
+                        photoUrl={category.photoUrl}
+                        onClick={() => onClickCategory(category)}
+                    />;
                 })}
-            </div>
+            </Layout>
             {
                 auth.accessType === "ADMIN"
-                ? (<button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</button>)
+                ? (<Button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
                 : (<></>)
             }
-        </div>
+        </Layout>
         </>
     );
 }

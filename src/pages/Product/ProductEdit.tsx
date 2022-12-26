@@ -3,13 +3,14 @@ import { useCreateProductMutation } from "../../app/store/product/product.api";
 import { useGetCategoriesQuery } from "../../app/store/category/category.api";
 import { Layout, Form, Select, Button, Input, Image } from "antd";
 import { useUploadPhotoMutation } from "../../app/store/photo/photo.api";
+import { CategoryEnum } from "../../app/store/category/category.types";
+import { Navbar } from "../../components/Navbar/Navbar";
 
 export const ProductEdit = () => {
     const [createProduct] = useCreateProductMutation();
     const [uploadPhoto] = useUploadPhotoMutation();
     const {data: categories} = useGetCategoriesQuery({
-        main: null,
-        leaf: true,
+        type: CategoryEnum.LEAF
     });
 
     const [state, setState] = useState({
@@ -74,6 +75,7 @@ export const ProductEdit = () => {
     return (
         <>
         <Layout>
+            <Navbar />
             <h1 className="ml-2 mt-4 font-mono">Создание товара</h1>
             <Form onFinish={onSubmit}>
                 <Form.Item>

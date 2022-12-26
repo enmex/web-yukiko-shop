@@ -1,11 +1,17 @@
 import { Auth } from "../../types/User";
 
+export enum AccessType {
+    ADMIN = "ADMIN",
+    MANAGER = "MANAGER",
+    CUSTOMER  = "CUSTOMER"
+}
+
 export type AuthState = {
     isAuthorized: boolean;
     token: string;
     expiresAt: number;
     email: string;
-    accessType: string;
+    accessType: AccessType;
 }
 
 export type AuthorizationResponse = Auth;

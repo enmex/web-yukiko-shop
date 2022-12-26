@@ -1,49 +1,44 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { useGetCategoriesQuery } from "../../app/store/category/category.api";
-import { setCategoryName } from "../../app/store/category/category.slice";
-import { Loading } from "../../components/Loading/Loading";
-import { Button, Form, Layout } from "antd";
-import { NavBar } from "../../components/NavBar/Navbar";
+import { setCategory } from "../../app/store/category/category.slice";
+import { Button, Layout } from "antd";
+import { Navbar } from "../../components/Navbar/Navbar";
 import { CategoryButton } from "../../components/Button/CategoryButton";
+import { CategoryEnum } from "../../app/store/category/category.types";
+import { translit } from "../../utils/translit";
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
     const auth = useAppSelector(state => state.auth);
 
-    const {isLoading, data: mainCategories} = useGetCategoriesQuery({
-        main: true,
-        leaf: null,
+    const {data: mainCategories} = useGetCategoriesQuery({
+        type: CategoryEnum.ROOT
     });
     const navigate = useNavigate();
 
-    const onClickCategory = (categoryName: string) => {
-        dispatch(setCategoryName(categoryName));
-        navigate("/catalog/" + categoryName);   
-    }
-
-    if (isLoading) {
-        return (
-            <>
-            <Loading />
-            </>
-        );
+    const onClickCategory = (category: {
+        id: string,
+        name: string,
+        photoUrl: string
+    }) => {
+        dispatch(setCategory(category.id));
+        navigate("/catalog/" + translit(category.name));   
     }
 
     if (!mainCategories || !mainCategories.length) {
         return (
             <>
             <Layout>
-                <NavBar />
-                <Form className="flex justify-center">
-                    <Form.Item>
+                <Navbar />
+                <Layout className="grid justify-center">
+                    <Layout className="flex m-4 mb-2 flex-col justify-center">
                         <h1>Каталог пуст, милорд</h1>
                         <h2>Советую добавить категорий</h2>
-                    </Form.Item>
-                    <Form.Item>
                         <Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>
-                    </Form.Item>
-                </Form>
+                    </Layout>
+                </Layout>
+                
             </Layout>
             </>
         );
@@ -52,17 +47,22 @@ export const Catalog = () => {
     return (
         <>
         <Layout>
-            <NavBar />
-                <div className="flex justify-center p-4">
-                    {mainCategories.map((category) => {
-                        return <CategoryButton onClick={() => onClickCategory(category.name)} photoUrl={category.photoUrl} />
-                    })}
-                </div>
-                {
-                    auth.accessType === "ADMIN"
-                    ? (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
-                    : (<></>)
-                }
+            <Navbar />
+            <Layout className="grid justify-center w-full p-5">
+                {mainCategories.map((category) => {
+                    return <CategoryButton
+                        key={category.id} 
+                        onClick={() => onClickCategory(category)} 
+                        photoUrl={category.photoUrl} 
+                        buttonText={category.name}
+                    />
+                })}
+            </Layout>
+            {
+                auth.accessType === "ADMIN"
+                ? (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
+                : (<></>)
+            }
         </Layout>
         </>
     );
