@@ -18,9 +18,11 @@ import { ProductInfo } from "./pages/Product/ProductInfo";
 import { AccessType, AuthState } from "./app/store/auth/auth.types";
 import { removeToken } from "./app/store/auth/auth.slice";
 import { Forbidden } from "./pages/Forbidden";
+import { useGetAccessTypeQuery } from "./app/store/auth/auth.api";
 
 const BaseRouter = () => {
-  const auth = useAppSelector(state => state.auth);
+  const auth = useAppSelector(state => state.persistedReducer.auth);
+  const {data: accessType} = useGetAccessTypeQuery();
 
   return (
     <>
@@ -40,12 +42,12 @@ const BaseRouter = () => {
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/catalog/*" element={<Subcategories />} />
           <Route path="/products/edit" element={
-            auth.isAuthorized && auth.accessType === AccessType.ADMIN ?
+            auth.isAuthorized && accessType === AccessType.ADMIN ?
             <ProductEdit /> : <Forbidden />
           } />
           <Route path="/products/*" element={<ProductInfo />} />
           <Route path="/categories/create" element={
-            auth.isAuthorized && auth.accessType === AccessType.ADMIN ?
+            auth.isAuthorized && accessType === AccessType.ADMIN ?
             <CreateCategory /> : <Forbidden />
           } />
         </Routes>
@@ -56,7 +58,7 @@ const BaseRouter = () => {
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const auth = useAppSelector(state => state.auth as AuthState);
+  const auth = useAppSelector(state => state.persistedReducer.auth as AuthState);
 
   useEffect(() => {
     if (new Date().getTime() > auth.expiresAt) {

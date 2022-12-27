@@ -7,7 +7,7 @@ import { setToken } from "../../app/store/auth/auth.slice";
 
 export const SignUp = () => {
     const dispatch = useAppDispatch();
-    const user = useAppSelector(state => state.auth);
+    const user = useAppSelector(state => state.persistedReducer.auth);
     const [state, setState] = useState({
         firstName: "",
         lastName: "",

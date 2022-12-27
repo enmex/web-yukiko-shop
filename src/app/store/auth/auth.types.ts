@@ -11,7 +11,6 @@ export type AuthState = {
     token: string;
     expiresAt: number;
     email: string;
-    accessType: AccessType;
 }
 
 export type AuthorizationResponse = Auth;

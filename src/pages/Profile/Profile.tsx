@@ -6,7 +6,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 
 
 export const Profile = () => {
-    const auth = useAppSelector(state => state.auth);
+    const auth = useAppSelector(state => state.persistedReducer.auth);
     const navigate = useNavigate();
 
     useEffect(() => {

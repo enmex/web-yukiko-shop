@@ -16,9 +16,12 @@ const categorySlice = createSlice({
     reducers: {
         setCategory: (state, action: PayloadAction<string>) => {
             state.id = action.payload;
+        },
+        removeCategory: (state) => {
+            state = initialState;
         }
     }
 });
 
-export const { setCategory } = categorySlice.actions;
+export const { setCategory, removeCategory } = categorySlice.actions;
 export const categoryReducer = categorySlice.reducer;

@@ -9,11 +9,14 @@ const productSlice = createSlice({
     name: "product",
     initialState,
     reducers: {
-        setProductId: (state, action: PayloadAction<string>) => {
+        setProduct: (state, action: PayloadAction<string>) => {
             state.id = action.payload;
+        },
+        removeProduct: (state) => {
+            state = initialState
         }
     }
 });
 
-export const { setProductId } = productSlice.actions;
+export const { setProduct, removeProduct } = productSlice.actions;
 export const productReducer = productSlice.reducer;

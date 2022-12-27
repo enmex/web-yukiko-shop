@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "../../app/store";
+import { useAppDispatch } from "../../app/store";
 import { useGetCategoriesQuery } from "../../app/store/category/category.api";
 import { setCategory } from "../../app/store/category/category.slice";
 import { Button, Layout } from "antd";
@@ -7,10 +7,13 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { CategoryButton } from "../../components/Button/CategoryButton";
 import { CategoryEnum } from "../../app/store/category/category.types";
 import { translit } from "../../utils/translit";
+import { useGetAccessTypeQuery } from "../../app/store/auth/auth.api";
+import { AccessType } from "../../app/store/auth/auth.types";
+import { Loading } from "../../components/Loading/Loading";
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
-    const auth = useAppSelector(state => state.auth);
+    const {isLoading, data: accessType} = useGetAccessTypeQuery();
 
     const {data: mainCategories} = useGetCategoriesQuery({
         type: CategoryEnum.ROOT
@@ -26,6 +29,14 @@ export const Catalog = () => {
         navigate("/catalog/" + translit(category.name));   
     }
 
+    if (isLoading) {
+        return (
+            <>
+            <Loading />
+            </>
+        );
+    }
+
     if (!mainCategories || !mainCategories.length) {
         return (
             <>
@@ -34,8 +45,12 @@ export const Catalog = () => {
                 <Layout className="grid justify-center">
                     <Layout className="flex m-4 mb-2 flex-col justify-center">
                         <h1>Каталог пуст, милорд</h1>
-                        <h2>Советую добавить категорий</h2>
-                        <Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>
+                        {accessType === AccessType.ADMIN && (
+                            <>
+                            <h2>Добавь категорий</h2>
+                            <Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>
+                            </>
+                        )}
                     </Layout>
                 </Layout>
                 
@@ -59,7 +74,7 @@ export const Catalog = () => {
                 })}
             </Layout>
             {
-                auth.accessType === "ADMIN"
+                accessType === AccessType.ADMIN
                 ? (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
                 : (<></>)
             }

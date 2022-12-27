@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AuthorizationResponse, SendVerifyCodePayload, SignInPayload, SignUpPayload } from './auth.types';
+import { AccessType, AuthorizationResponse, SendVerifyCodePayload, SignInPayload, SignUpPayload } from './auth.types';
 import { RootState } from '..';
 
 export const authApi = createApi({
@@ -7,7 +7,7 @@ export const authApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/auth/',
         prepareHeaders: (headers, { getState }) => {
-            headers.set('Authorization', 'Bearer ' + (getState() as RootState).auth.token);
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.token);
         }
     }),
     endpoints: build => ({
@@ -32,13 +32,24 @@ export const authApi = createApi({
                 body,
             })
         }),
+        getAccessType: build.query<AccessType, void>({
+            query: () => ({
+                url: 'access'
+            }),
+            transformResponse: (response: {
+                accessType: string;
+            }) => {
+                return response.accessType as AccessType; 
+            }
+        })
     })
 });
 
-export const {useSendVerifyCodeMutation, useSignUpMutation, useSignInMutation} = authApi;
+export const {useSendVerifyCodeMutation, useSignUpMutation, useSignInMutation, useGetAccessTypeQuery} = authApi;
 
 export const {
     sendVerifyCode,
     signIn,
-    signUp
+    signUp,
+    getAccessType
 } = authApi.endpoints;

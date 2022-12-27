@@ -1,52 +1,26 @@
-import { Menu } from "antd";
-import { useNavigate } from "react-router";
 import { useAppSelector } from "../../app/store";
-import { MenuInfo } from "rc-menu/lib/interface";
+import { useState } from "react";
 
 export const Navbar = () => {
-    const navigate = useNavigate();
-    const auth = useAppSelector(state => state.auth);
-
-    const data = auth.isAuthorized ? {
-        onClick: () => navigate("/profile"),
-        label: "Профиль"
-    } : {
-        onClick: () => navigate("/signIn"),
-        label: "Войти"
-    };
-
-    const items = [
-        {
-            key: "main",
-            label: "Главная"
-        },
-        {
-            key: "catalog",
-            label: "Каталог"
-        },
-        {
-            key: "user",
-            label: data.label
-        }
-    ];
-
-    const onClick = (info: MenuInfo) => {
-        switch (info.key) {
-            case "main": 
-                navigate("/");
-                break;
-            case "catalog":
-                navigate("/catalog");
-                break;
-            case "user":
-                data.onClick();
-                break;
-        }
-    }
+    const auth = useAppSelector(state => state.persistedReducer.auth);
+    const [hovered, setHovered] = useState(false);
     
     return (
         <>
-        <Menu className="flex justify-center bg-gradient-to-r from-gray-700 to-blue-500 text-purple-50" mode="horizontal" onClick={onClick} items={items} />
-        </> 
+        <header className="bg-gray-900 py-4">
+            <div className="container mx-auto flex items-center justify-between px-4">
+                <a onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} href="/" className="text-white hover:text-gray-400 focus:text-gray-400">
+                    {
+                        hovered ? (<img src="/logo64violet.png" alt="Yukiko Shop" className="transition-opacity h-14 w-14" />)
+                         : (<img src="/logo64.png" alt="Yukiko Shop" className="transition-opacity h-14 w-14" />)
+                    }
+                </a>
+                <nav className="flex items-center">
+                    <a href={auth.isAuthorized ? "/profile" : "/signIn"} className="px-2 py-1 font-medium text-white hover:text-gray-400 focus:text-gray-400">{auth.isAuthorized ? "Профиль" : "Войти"}</a>
+                    <a href="/catalog" className="px-2 py-1 font-medium text-white hover:text-gray-400 focus:text-gray-400">Каталог</a>
+                </nav>
+            </div>
+        </header>
+        </>
     );
 }

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { useGetCategoryQuery } from "../../app/store/category/category.api";
 import { setCategory } from "../../app/store/category/category.slice";
-import { setProductId } from "../../app/store/product/product.slice";
+import { setProduct } from "../../app/store/product/product.slice";
 import { Button, Layout } from "antd";
 import { CategoryButton } from "../../components/Button/CategoryButton";
 import { ProductButton } from "../../components/Button/ProductButton";
@@ -10,11 +10,13 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { Product } from "../../app/types/Product";
 import { translit } from "../../utils/translit";
 import { Category } from "../../app/types/Category";
+import { AccessType } from "../../app/store/auth/auth.types";
+import { useGetAccessTypeQuery } from "../../app/store/auth/auth.api";
 
 export const Subcategories = () => {
     const dispatch = useAppDispatch();
-    const currentCategory = useAppSelector(state => state.category);
-    const auth = useAppSelector(state => state.auth);
+    const currentCategory = useAppSelector(state => state.persistedReducer.category);
+    const {data: accessType} = useGetAccessTypeQuery();
     const navigate = useNavigate();
 
     const {data: category} = useGetCategoryQuery(currentCategory.id, {
@@ -27,13 +29,8 @@ export const Subcategories = () => {
     }
 
     const onClickProduct = (product: Product) => {
-        try {
-            dispatch(setProductId(product.id));
-            navigate('/products/' + translit(product.name));
-        } catch (e) {
-            const message = e instanceof Error ? e.message : "unknown error";
-            console.log(message);
-        }           
+        dispatch(setProduct(product.id));
+        navigate('/products/' + translit(product.name));          
     }
 
     if (!category?.children || category.children.length === 0) {
@@ -45,19 +42,18 @@ export const Subcategories = () => {
                         buttonText={product.name}
                         photoUrl={product.photoUrl}
                         onClick={() => onClickProduct(product)}
-                    />
+                        />
              });
         return (
             <>
             <Layout>
                 <Navbar />
-                <Layout className="flex justify-center">
+                <Layout className="flex flex-col justify-around items-center flex-wrap">
                     {productList}
                 </Layout>
                 {
-                    auth.accessType === "ADMIN"
-                    ? (<button onClick={() => navigate("/products/edit")}>Добавить товар</button>)
-                    : (<></>)
+                    accessType === AccessType.ADMIN
+                    && (<button onClick={() => navigate("/products/edit")}>Добавить товар</button>)
                 }
             </Layout>
             </>
@@ -66,8 +62,9 @@ export const Subcategories = () => {
 
     return (
         <>
-        <Layout className="container justify-center">
-            <Layout className="flex justify-around p-4">
+        <Layout>
+            <Navbar />
+            <Layout className="flex flex-col justify-around flex-wrap">
                 {category.children.map((category) => {
                     return <CategoryButton 
                         key={category.id} 
@@ -78,9 +75,8 @@ export const Subcategories = () => {
                 })}
             </Layout>
             {
-                auth.accessType === "ADMIN"
-                ? (<Button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
-                : (<></>)
+                accessType === AccessType.ADMIN
+                && (<Button className="bg-blue-500" onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
             }
         </Layout>
         </>

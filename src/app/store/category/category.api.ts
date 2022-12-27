@@ -8,7 +8,7 @@ export const categoryApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/categories',
         prepareHeaders: (headers, { getState }) => {
-            headers.set('Authorization', 'Bearer ' + (getState() as RootState).auth.token);
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.token);
         }
     }),
     endpoints: build => ({

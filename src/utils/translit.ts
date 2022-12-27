@@ -26,7 +26,7 @@ const converter = new Map<string, string>([
     ['ч', 'ch'],
     ['ш', 'sh'],
     ['щ', 'sc'],
-    ['ь', ''],
+    ['ь', 'b'],
     ['ы', 'y'],    
     ['ъ', ''],
     ['э', 'e'],    
@@ -40,8 +40,12 @@ export const translit = (word: string): string => {
 
     let answer = '';
     for (let i = 0; i < word.length; i++) {
-        answer += converter.get(word[i]);
+        if (word[i] === ' ') {
+            answer += '-';
+        } else {
+            answer += converter.get(word[i]);
+        }
     }
 
-    return answer.replace(/\s/g, '-');
+    return answer;
 }

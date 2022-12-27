@@ -8,7 +8,7 @@ export const ProductButton = (props: {
 }) => {
     return (
         <>
-        <Button onClick={props.onClick} className="flex w-1/2 h-[300px] justify-center">
+        <Button onClick={props.onClick} className="flex w-[500px] h-[300px] justify-center">
             <img
                 src={props.photoUrl}
                 className="w-full h-auto transition-shadow ease-in-out duration-300 shadow-none hover:shadow-xl"
