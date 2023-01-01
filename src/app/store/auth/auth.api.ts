@@ -7,7 +7,7 @@ export const authApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/auth/',
         prepareHeaders: (headers, { getState }) => {
-            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.token);
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.access.token);
         }
     }),
     endpoints: build => ({
@@ -41,15 +41,29 @@ export const authApi = createApi({
             }) => {
                 return response.accessType as AccessType; 
             }
+        }),
+        refreshToken: build.mutation<AuthorizationResponse, void>({
+            query: (body) => ({
+                url:'refreshToken',
+                method: 'GET',
+                body
+            })
         })
     })
 });
 
-export const {useSendVerifyCodeMutation, useSignUpMutation, useSignInMutation, useGetAccessTypeQuery} = authApi;
+export const {
+    useSendVerifyCodeMutation, 
+    useSignUpMutation, 
+    useSignInMutation, 
+    useGetAccessTypeQuery,
+    useRefreshTokenMutation
+} = authApi;
 
 export const {
     sendVerifyCode,
     signIn,
     signUp,
-    getAccessType
+    getAccessType,
+    refreshToken
 } = authApi.endpoints;

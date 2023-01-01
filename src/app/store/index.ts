@@ -2,25 +2,24 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { categoryApi } from "./category/category.api";
 import { authReducer } from "./auth/auth.slice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { categoryReducer } from "./category/category.slice";
 import { productApi } from "./product/product.api";
-import { productReducer } from "./product/product.slice";
 import { photoApi } from "./photo/photo.api";
 import { photoReducer } from "./photo/photo.slice";
-import storage from "redux-persist/lib/storage";
+import AsyncStorage from "redux-persist/lib/storage";
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore} from "redux-persist";
 import { authApi } from "./auth/auth.api";
+import { cartApi } from "./cart/cart.api";
+import { cartReducer } from "./cart/cart.slice";
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    category: categoryReducer,
-    product: productReducer,
     photo: photoReducer,
+    cart: cartReducer
 });
 
 const persistConfig = {
     key: 'root',
-    storage
+    storage: AsyncStorage
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -31,13 +30,18 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,
         [productApi.reducerPath]: productApi.reducer,
-        [photoApi.reducerPath]: photoApi.reducer
+        [photoApi.reducerPath]: photoApi.reducer,
+        [cartApi.reducerPath]: cartApi.reducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         }
-    }).concat(authApi.middleware).concat(categoryApi.middleware).concat(productApi.middleware).concat(photoApi.middleware)
+    }).concat(authApi.middleware)
+        .concat(categoryApi.middleware)
+        .concat(productApi.middleware)
+        .concat(photoApi.middleware)
+        .concat(cartApi.middleware)
 });
 
 export const persister = persistStore(store);

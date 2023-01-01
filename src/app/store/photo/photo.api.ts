@@ -7,7 +7,7 @@ export const photoApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/images',
         prepareHeaders: (headers, { getState }) => {
-            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.token);
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.access.token);
         }
     }),
     endpoints: build => ({

@@ -5,8 +5,13 @@ import { Layout, Form, Select, Button, Input, Image } from "antd";
 import { useUploadPhotoMutation } from "../../app/store/photo/photo.api";
 import { CategoryEnum } from "../../app/store/category/category.types";
 import { Navbar } from "../../components/Navbar/Navbar";
+import { AuthState } from "../../app/store/auth/auth.types";
 
-export const ProductEdit = () => {
+export const ProductEdit = (
+    props: {
+        auth: AuthState
+    }
+) => {
     const [createProduct] = useCreateProductMutation();
     const [uploadPhoto] = useUploadPhotoMutation();
     const {data: categories} = useGetCategoriesQuery({
@@ -75,7 +80,7 @@ export const ProductEdit = () => {
     return (
         <>
         <Layout>
-            <Navbar />
+            <Navbar auth={props.auth}/>
             <h1 className="ml-2 mt-4 font-mono">Создание товара</h1>
             <Form onFinish={onSubmit}>
                 <Form.Item>

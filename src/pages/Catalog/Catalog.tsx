@@ -8,10 +8,14 @@ import { CategoryButton } from "../../components/Button/CategoryButton";
 import { CategoryEnum } from "../../app/store/category/category.types";
 import { translit } from "../../utils/translit";
 import { useGetAccessTypeQuery } from "../../app/store/auth/auth.api";
-import { AccessType } from "../../app/store/auth/auth.types";
+import { AccessType, AuthState } from "../../app/store/auth/auth.types";
 import { Loading } from "../../components/Loading/Loading";
 
-export const Catalog = () => {
+export const Catalog = (
+    props: {
+        auth: AuthState
+    }
+) => {
     const dispatch = useAppDispatch();
     const {isLoading, data: accessType} = useGetAccessTypeQuery();
 
@@ -26,7 +30,7 @@ export const Catalog = () => {
         photoUrl: string
     }) => {
         dispatch(setCategory(category.id));
-        navigate("/catalog/" + translit(category.name));   
+        navigate("/catalog/" + category.id + "/" + translit(category.name));   
     }
 
     if (isLoading) {
@@ -41,7 +45,7 @@ export const Catalog = () => {
         return (
             <>
             <Layout>
-                <Navbar />
+                <Navbar auth={props.auth}/>
                 <Layout className="grid justify-center">
                     <Layout className="flex m-4 mb-2 flex-col justify-center">
                         <h1>Каталог пуст, милорд</h1>
@@ -53,7 +57,6 @@ export const Catalog = () => {
                         )}
                     </Layout>
                 </Layout>
-                
             </Layout>
             </>
         );
@@ -62,7 +65,7 @@ export const Catalog = () => {
     return (
         <>
         <Layout>
-            <Navbar />
+            <Navbar auth={props.auth}/>
             <Layout className="grid justify-center w-full p-5">
                 {mainCategories.map((category) => {
                     return <CategoryButton
@@ -74,9 +77,8 @@ export const Catalog = () => {
                 })}
             </Layout>
             {
-                accessType === AccessType.ADMIN
-                ? (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
-                : (<></>)
+                accessType === AccessType.ADMIN &&
+                (<Button onClick={() => navigate("/categories/create")}>Создать категорию</Button>)
             }
         </Layout>
         </>

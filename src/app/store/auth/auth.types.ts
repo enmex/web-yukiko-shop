@@ -8,8 +8,14 @@ export enum AccessType {
 
 export type AuthState = {
     isAuthorized: boolean;
-    token: string;
-    expiresAt: number;
+    access: {
+        token: string;
+        expiresAt: number;
+    };
+    refresh: {
+        token: string;
+        expiresAt: number;
+    };
     email: string;
 }
 

@@ -4,8 +4,13 @@ import { Loading } from "../../components/Loading/Loading";
 import { Button, Form, Input, Layout, Select } from "antd";
 import { ImageUpload } from "../../components/ImageUpload/ImageUpload";
 import { Navbar } from "../../components/Navbar/Navbar";
+import { AuthState } from "../../app/store/auth/auth.types";
 
-export const CreateCategory = () => {
+export const CreateCategory = (
+    props: {
+        auth: AuthState
+    }
+) => {
     const [createCategory] = useCreateCategoryMutation();
     const { isLoading, data } = useGetCategoriesQuery({});
     const [currentCategory, setCurrentCategory] = useState<{
@@ -67,7 +72,7 @@ export const CreateCategory = () => {
     return (
         <>
         <Layout>
-            <Navbar />
+            <Navbar auth={props.auth}/>
             <h1 className="ml-2 mt-4 font-mono">Создание товара</h1>
             <Form onFinish={onSubmit}>
                 <Form.Item>

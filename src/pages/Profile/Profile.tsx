@@ -1,16 +1,19 @@
 import { useEffect } from "react";
-import { useAppSelector } from "../../app/store";
 import { useNavigate } from "react-router";
 import Layout from "antd/es/layout/layout";
 import { Navbar } from "../../components/Navbar/Navbar";
+import { AuthState } from "../../app/store/auth/auth.types";
 
 
-export const Profile = () => {
-    const auth = useAppSelector(state => state.persistedReducer.auth);
+export const Profile = (
+    props: {
+        auth: AuthState
+    }
+) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!auth.isAuthorized) {
+        if (!props.auth.isAuthorized) {
             navigate("/signIn");
         }
     })
@@ -18,7 +21,7 @@ export const Profile = () => {
     return (
         <>
         <Layout>
-            <Navbar />
+            <Navbar auth={props.auth}/>
             <h1>Здесь будет профиль</h1>
         </Layout>
         </>

@@ -2,13 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 import { CreateCategoryPayload, GetCategoriesResponse, GetCategoryPayload, GetCategoryResponse } from "./category.types";
 import { RootState } from "..";
 
-
 export const categoryApi = createApi({
     reducerPath: 'api/category',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:8080/categories',
         prepareHeaders: (headers, { getState }) => {
-            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.token);
+            headers.set('Authorization', 'Bearer ' + (getState() as RootState).persistedReducer.auth.access.token);
         }
     }),
     endpoints: build => ({

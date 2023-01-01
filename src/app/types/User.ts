@@ -1,5 +1,3 @@
-import { AccessType } from "../store/auth/auth.types";
-
 export type Auth = {
     access: {
         token: string;
@@ -9,7 +7,6 @@ export type Auth = {
         token: string;
         expiresAt: number;
     };
-    accessType: AccessType;
 }
 
 export type User = {
